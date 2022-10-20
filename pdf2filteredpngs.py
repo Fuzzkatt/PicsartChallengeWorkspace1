@@ -26,4 +26,8 @@ for i in range(len(doc)):
 
     response = requests.request("POST", url, headers=headers, data=payload, files=files)
     data = json.loads(response.text)
-    print(data['data']['url'])
+    url = data['data']['url']
+
+    img_data = requests.get(url).content
+    with open(png_file, 'wb') as handler:
+        handler.write(img_data)
