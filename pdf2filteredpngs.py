@@ -7,6 +7,7 @@ from PIL import Image
 
 parser = argparse.ArgumentParser()
 parser.add_argument('pdf_file')
+parser.add_argument('filter')
 args = parser.parse_args()
 
 doc = fitz.open(args.pdf_file)
@@ -21,9 +22,13 @@ for i in range(len(doc)):
     png_file = f"{args.pdf_file[:-4]}_page{i+1}.png"
     pix.save(png_file)
 
-    url = "https://api.picsart.io/tools/demo/removebg"
-
-    payload={"bg_blur": "0", "scale": "fit", "format": "PNG", "output_type": "cutout"}
+    if args.filter == 'upscale':
+        url = "https://api.picsart.io/tools/demo/upscale/enhance"
+        payload={"unit": "px", "format": "JPG", "upscale_factor": "2"}
+    elif args.filter == 'removebg':
+        url = "https://api.picsart.io/tools/demo/removebg"
+        payload={"bg_blur": "0", "scale": "fit", "format": "PNG", "output_type": "cutout"}
+    
     files=[
         ('image',(png_file, open(png_file, 'rb'),'image/png'))
     ]
