@@ -18,7 +18,7 @@ new_pdf_file = f"{args.pdf_file[:-4]}_fixed.pdf"
 for i in range(len(doc)):
     print(f"working on page {i+1} of {len(doc)}...")
     page = doc[i]
-    pix = page.get_pixmap()
+    pix = page.get_pixmap(dpi=244)
     png_file = f"{args.pdf_file[:-4]}_page{i+1}.png"
     pix.save(png_file)
 
@@ -31,12 +31,9 @@ for i in range(len(doc)):
     elif args.filter == 'vectorizer':
         url = "https://api.picsart.io/tools/demo/vectorizer"
         payload={"downscale_to": "2048"}
-    elif args.filter == 'vectorizer':
+    elif args.filter == 'adjust':
         url = "https://api.picsart.io/tools/demo/adjust"
         payload={"contrast": "0", "brightness": "0", "saturation": "0", "sharpen": "0", "shadows": "0", "clarity": "0", "temperature": "0", "format": "JPG", "hue": "0", "vignette": "0", "noise": "0", "highlights": "0"}
-    elif args.filter == 'upload':
-        url = "https://api.picsart.io/tools/demo/upload"
-        payload={}  
 
     files=[
         ('image',(png_file, open(png_file, 'rb'),'image/png'))
