@@ -28,7 +28,16 @@ for i in range(len(doc)):
     elif args.filter == 'removebg':
         url = "https://api.picsart.io/tools/demo/removebg"
         payload={"bg_blur": "0", "scale": "fit", "format": "PNG", "output_type": "cutout"}
-    
+    elif args.filter == 'vectorizer':
+        url = "https://api.picsart.io/tools/demo/vectorizer"
+        payload={"downscale_to": "2048"}
+    elif args.filter == 'vectorizer':
+        url = "https://api.picsart.io/tools/demo/adjust"
+        payload={"contrast": "0", "brightness": "0", "saturation": "0", "sharpen": "0", "shadows": "0", "clarity": "0", "temperature": "0", "format": "JPG", "hue": "0", "vignette": "0", "noise": "0", "highlights": "0"}
+    elif args.filter == 'upload':
+        url = "https://api.picsart.io/tools/demo/upload"
+        payload={}  
+
     files=[
         ('image',(png_file, open(png_file, 'rb'),'image/png'))
     ]
