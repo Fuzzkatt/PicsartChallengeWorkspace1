@@ -25,18 +25,6 @@ for i in range(len(doc)):
     png_file = f"{args.pdf_file[:-4]}_page{i+1}.png"
     pix.save(png_file)
 
-    # do mandatory upscale
-    url = "https://api.picsart.io/tools/demo/upscale/enhance"
-    payload={"unit": "px", "format": "PNG", "upscale_factor": "2"}
-    files=[('image',(png_file, open(png_file, 'rb'),'image/png'))]
-    headers = {"accept": "application/json", "apikey": "sifH0Y0MoRLcboeYh899RiWFw29vt0Pz"}
-    response = requests.request("POST", url, headers=headers, data=payload, files=files)
-    data = json.loads(response.text)
-    url = data['data']['url']
-    img_data = requests.get(url).content
-    with open(png_file, 'wb') as handler:
-        handler.write(img_data)
-
     # do optional adjusts
     if args.adjust:
         url = "https://api.picsart.io/tools/demo/adjust"
@@ -50,6 +38,18 @@ for i in range(len(doc)):
         with open(png_file, 'wb') as handler:
             handler.write(img_data)
     
+    # do mandatory upscale
+    url = "https://api.picsart.io/tools/demo/upscale/enhance"
+    payload={"unit": "px", "format": "PNG", "upscale_factor": "2"}
+    files=[('image',(png_file, open(png_file, 'rb'),'image/png'))]
+    headers = {"accept": "application/json", "apikey": "sifH0Y0MoRLcboeYh899RiWFw29vt0Pz"}
+    response = requests.request("POST", url, headers=headers, data=payload, files=files)
+    data = json.loads(response.text)
+    url = data['data']['url']
+    img_data = requests.get(url).content
+    with open(png_file, 'wb') as handler:
+        handler.write(img_data)
+    
     # store final result
     png = Image.open(png_file).convert("RGB")
     images.append(png)
@@ -58,5 +58,5 @@ for i in range(len(doc)):
 images[0].convert("RGB").save(new_pdf_file, resolution=100.0, save_all=True, append_images=images[1:])
 
 # remove temporary png files
-files_to_remove = f"{args.pdf_file[:-4]}_page*"
-os.system(f"rm {files_to_remove}")
+# files_to_remove = f"{args.pdf_file[:-4]}_page*"
+# os.system(f"rm {files_to_remove}")
